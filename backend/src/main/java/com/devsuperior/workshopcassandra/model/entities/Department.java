@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Table(value = "departments")
 public class Department {
-    
+
     @PrimaryKey
     private UUID id;
     private String name;
