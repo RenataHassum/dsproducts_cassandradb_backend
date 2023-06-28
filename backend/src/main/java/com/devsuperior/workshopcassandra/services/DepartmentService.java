@@ -18,11 +18,6 @@ public class DepartmentService {
     @Autowired
     private DepartmentRepository repository;
 
-    private Department getById(UUID id) {
-        Optional<Department> result = repository.findById(id);
-        return result.orElseThrow(() -> new ResourceNotFoundException("Id não encontrado"));
-    }
-
     public List<DepartmentDTO> findAll() {
         List<Department> list = repository.findAll();
         return list.stream().map(x -> new DepartmentDTO(x)).collect(Collectors.toList());
@@ -31,5 +26,22 @@ public class DepartmentService {
     public DepartmentDTO findById(UUID id) {
         Department entity = getById(id);
         return new DepartmentDTO(entity);
+    }
+
+    public DepartmentDTO insert(DepartmentDTO dto) {
+        Department entity = new Department();
+        entity.setId(UUID.randomUUID());
+        copyDtoToEntity(dto, entity);
+        entity = repository.save(entity);
+        return new DepartmentDTO(entity);
+    }
+
+    private Department getById(UUID id) {
+        Optional<Department> result = repository.findById(id);
+        return result.orElseThrow(() -> new ResourceNotFoundException("Id não encontrado"));
+    }
+
+    private void copyDtoToEntity(DepartmentDTO dto, Department entity) {
+        entity.setName(dto.getName());
     }
 }
