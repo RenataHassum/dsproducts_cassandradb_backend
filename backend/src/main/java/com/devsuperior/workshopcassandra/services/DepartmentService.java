@@ -36,6 +36,13 @@ public class DepartmentService {
         return new DepartmentDTO(entity);
     }
 
+    public DepartmentDTO update(UUID id, DepartmentDTO dto) {
+        Department entity = getById(id);
+        copyDtoToEntity(dto, entity);
+        entity = repository.save(entity);
+        return new DepartmentDTO(entity);
+    }
+
     private Department getById(UUID id) {
         Optional<Department> result = repository.findById(id);
         return result.orElseThrow(() -> new ResourceNotFoundException("Id não encontrado"));
