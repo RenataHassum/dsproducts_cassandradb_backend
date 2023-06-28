@@ -25,13 +25,16 @@ public class ProductService {
 
     public List<ProductDTO> findByDepartment(String department) {
         List<Product> list = "".equals(department) ? repository.findAll() : repository.findByDepartment(department);
-        return list.stream().map(x -> new ProductDTO(x)).collect(Collectors.toList());
+        return list.stream().map(ProductDTO::new).collect(Collectors.toList());
+    }
+
+    public List<ProductDTO> findByDescription(String text) {
+        List<Product> list = "".equals(text) ? repository.findAll() : repository.findByDescription("%" + text + "%");
+        return list.stream().map(ProductDTO::new).collect(Collectors.toList());
     }
 
     private Product getById(UUID id) {
         Optional<Product> result = repository.findById(id);
         return result.orElseThrow(() -> new ResourceNotFoundException("Id não encontrado"));
     }
-
-
 }
